@@ -1,4 +1,77 @@
 import type { Article } from '@/types';
 
-// 「さがす」の記事データ。中身はチケット08で投入する。
-export const articles: Article[] = [];
+// 「さがす」の記事データ。すべて飯田市公式サイトの実在ページ（URLは取得確認済み）。
+// 出典明記・改変しない方針のため、本文はリンク先（公式）で開く。
+export const articles: Article[] = [
+  {
+    id: 'junyu-ikuji-soudan',
+    title: '授乳・育児相談',
+    updatedAt: '2026-05-11',
+    ages: ['pregnancy', 'age0_1'],
+    purposes: ['care', 'worry'],
+    summary:
+      '産後〜1〜2歳の母親向けに、医療機関・助産院での授乳/育児相談費用（1回2,000円）を補助する利用券を交付。',
+    url: 'https://www.city.iida.lg.jp/site/kosodate/junyu-ikujisoudan1.html',
+    source: '飯田市子育て応援サイト',
+  },
+  {
+    id: 'jido-teate',
+    title: '児童手当',
+    updatedAt: '2026-03-25',
+    ages: ['age0_1', 'age2_3', 'age4_6'],
+    purposes: ['support'],
+    summary: '対象児童の年齢・出生順に応じて月10,000〜30,000円を支給。申請方法・支給時期を案内。',
+    url: 'https://www.city.iida.lg.jp/site/kosodate/-jidoute.html',
+    source: '飯田市子育て応援サイト',
+  },
+  {
+    id: 'sango-care',
+    title: '産後ケア事業（通所型・訪問型）',
+    updatedAt: '2026-04-01',
+    ages: ['pregnancy', 'age0_1'],
+    purposes: ['care'],
+    summary: '産後1年以内の母子向けに、宿泊型に加え通所型（日帰り）・訪問型の産後ケアを提供。',
+    url: 'https://www.city.iida.lg.jp/site/kosodate/sangocare.html',
+    source: '飯田市子育て応援サイト',
+  },
+  {
+    id: 'nyuyoji-kenshin',
+    title: '乳幼児健診のご案内',
+    updatedAt: '2026-05-07',
+    ages: ['age0_1', 'age2_3'],
+    purposes: ['checkup'],
+    summary: '4か月児・1歳6か月児・3歳児健診ほか、各月齢の健診・相談の日程と対象を案内。',
+    url: 'https://www.city.iida.lg.jp/site/kosodate/nyuyojikenshin-syousai.html',
+    source: '飯田市子育て応援サイト',
+  },
+  {
+    id: 'ikkagetsu-kenshin-josei',
+    title: '1か月児健康診査の費用を一部助成します',
+    updatedAt: '2025-04-22',
+    ages: ['age0_1'],
+    purposes: ['checkup', 'support'],
+    summary: '1か月児健康診査にかかる費用の一部を助成する制度の案内。',
+    url: 'https://www.city.iida.lg.jp/site/kosodate/ikkagetuzi-kenkousinnsa.html',
+    source: '飯田市子育て応援サイト',
+  },
+  {
+    id: 'nyusho-tetsuzuki',
+    title: '保育所や認定こども園等の入所手続き',
+    updatedAt: '2025-09-22',
+    ages: ['age0_1', 'age2_3', 'age4_6'],
+    purposes: ['enroll'],
+    summary: '保育所・認定こども園等への新規入所手続き、申請期限、必要書類、継続手続きを案内。',
+    url: 'https://www.city.iida.lg.jp/site/kosodate/nyuushotetuduki.html',
+    source: '飯田市子育て応援サイト',
+  },
+  {
+    id: 'sanzen-sango-shien',
+    title: '産前産後支援事業',
+    updatedAt: '2026-02-17',
+    ages: ['pregnancy', 'age0_1'],
+    purposes: ['support', 'care'],
+    summary: '妊娠中・産後の家庭を支援する事業の案内。',
+    url: 'https://www.city.iida.lg.jp/site/kosodate/sanngosien.html',
+    source: '飯田市子育て応援サイト',
+  },
+];
