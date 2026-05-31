@@ -11,24 +11,30 @@
 
 ## Todo
 
+> 命名は既存に合わせ **ファイル名は kebab-case**（`tag.tsx` 等）、コンポーネント名は PascalCase（`Tag`）。Todo 表記の `Tag.tsx` と機能は同一。
+> 色の出し分けは NativeWind の動的class罠を避けるため `components/tokens.ts` の静的 `TONE` マップに集約。日本語ラベル・施設カテゴリ→tone/色は `lib/labels.ts` `lib/categories.ts`、外部リンクは `lib/links.ts`。
+
 ### タグ・チップ
-- [ ] `Tag.tsx`：種別/年齢/日付/カテゴリ/緊急のピル型タグ（色はカラートークンの cat*/tag*/danger を出し分け）
-- [ ] `CategoryChips.tsx`：横スクロールの絞り込みチップ（選択状態をコーラルで強調）※map.png 参照
-- [ ] `SegmentedControl.tsx`：`[年齢でさがす | 目的でさがす]` の2分割トグル ※sagasu_ivent.png 参照
-- [ ] `MapListToggle.tsx`：`[地図 | 一覧]` トグル（選択側をコーラル塗り）※map.png 参照
+- [×] `tag.tsx`：種別/年齢/日付/カテゴリ/緊急/お知らせ のピル型タグ（tone でトークン出し分け、10 tone）
+- [×] `category-chips.tsx`：横スクロールの絞り込みチップ（選択＝薄コーラル塗り）※map.png 参照
+- [×] `segmented-control.tsx`：汎用2分割トグル（`[年齢でさがす | 目的でさがす]` 等）※sagasu_ivent.png 参照
+- [×] `map-list-toggle.tsx`：`[地図 | 一覧]` トグル（SegmentedControl ラッパー）※map.png 参照
 
 ### カード
-- [ ] `ArticleCard.tsx`：タイトル・更新日・要点1〜2行＋公式/PDFリンク（さがす用）
-- [ ] `FacilityCard.tsx`：種別タグ・対象年齢タグ・名称・地区・開所時間＋`[地図で見る][電話][公式]` ※map.png 下部のカード
-- [ ] `EventCard.tsx`：日付タグ・対象年齢タグ・カテゴリタグ・場所・申込/詳細リンク ※sagasu_ivent.png 右
-- [ ] ホームの新着カード（イベント/お知らせのタグ付き行）※home.png
+- [×] `article-card.tsx`：タイトル・更新日・要点1〜2行＋公式/PDFリンク（さがす用）
+- [×] `facility-card.tsx`：種別タグ・対象年齢タグ・名称・地区・開所時間＋`[地図で見る][電話][公式]`（有無で活性判定）※map.png 下部のカード
+- [×] `event-card.tsx`：日付タグ・対象年齢タグ・カテゴリタグ・場所・申込/詳細リンク（dimmed 対応）※sagasu_ivent.png 右
+- [×] ホームの新着カード `news-row.tsx`（イベント/お知らせのタグ付き行＋chevron）※home.png
 
 ### その他
-- [ ] `EmergencyBanner.tsx`：赤系の緊急バナー（♯8000 タップ発信）※home.png 上部
-- [ ] 大ボタン（丸アイコン＋ラベル＋サブ説明）コンポーネント ※home.png の マップ/さがす/イベント
-- [ ] 外部リンクの共通ハンドラ（`tel:` 発信 / 経路URL / 公式URL / PDF を `expo-linking` で開く）
+- [×] `emergency-banner.tsx`：赤系の緊急バナー（♯8000 タップ発信）※home.png 上部
+- [×] 大ボタン `big-button.tsx`（丸アイコン＋ラベル＋サブ説明）※home.png の マップ/さがす/イベント
+- [×] 外部リンクの共通ハンドラ `lib/links.ts`（`tel:` 発信 / 経路URL / 公式URL・PDF を expo-linking + expo-web-browser で開く）
 
 ## 完了条件
-- [ ] 各部品が単体で表示でき、カラートークンから色を取得している
-- [ ] タップ領域48×48pt以上・角丸・淡いボーダーのデザイン規約を満たす
-- [ ] 外部リンクハンドラが電話/経路/URL/PDFを実際に開ける
+- [×] 各部品が単体で表示でき、カラートークンから色を取得している（`app/showcase.tsx` で実データ表示、web export で全 tone の CSS 生成を確認）
+- [×] タップ領域48×48pt以上・角丸・淡いボーダーのデザイン規約を満たす（`min-h-touch`/`rounded-card`/`rounded-pill`/`border-border`、影なし）
+- [×] 外部リンクハンドラが電話/経路/URL/PDFを実際に開ける（`callPhone`/`openDirections`/`openExternal` を実装・カードに結線。tel/in-app browser の実機動作は開発ビルド（09）で最終確認）
+
+## 検証用ルート（後で削除）
+- `app/showcase.tsx`：全コンポーネントを実データで並べた確認専用ルート（`/showcase`、タブ外）。03〜06 で各画面に組み込んだら削除する。

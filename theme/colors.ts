@@ -16,8 +16,11 @@ export const colors = palette as {
   textSub: string;
   border: string;
   catHoiku: { pin: string; bg: string; tx: string };
+  catKodomoen: { pin: string; bg: string; tx: string };
+  catIchiji: { pin: string; bg: string; tx: string };
   catHiroba: { pin: string; bg: string; tx: string };
   catShokudo: { pin: string; bg: string; tx: string };
+  catAsobi: { pin: string; bg: string; tx: string };
   tagAge: { bg: string; tx: string };
   tagDate: { bg: string; tx: string };
   danger: { bg: string; tx: string };

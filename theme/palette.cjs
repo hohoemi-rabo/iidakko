@@ -15,8 +15,11 @@ module.exports = {
 
   // カテゴリ別ピン／タグ色（ネスト → Tailwind では bg-catHoiku-bg / text-catHoiku-tx 等）
   catHoiku: { pin: '#D85A30', bg: '#FAECE7', tx: '#993C1D' }, // 保育園＝コーラル
-  catHiroba: { pin: '#D4537E', bg: '#FBEAF0', tx: '#993556' }, // ひろば＝ピンク
+  catKodomoen: { pin: '#6C4FD6', bg: '#EDE9FB', tx: '#4B33A8' }, // 認定こども園＝紫
+  catIchiji: { pin: '#E08A1E', bg: '#FBF0DC', tx: '#8A5310' }, // 一時預かり＝琥珀
+  catHiroba: { pin: '#D4537E', bg: '#FBEAF0', tx: '#993556' }, // つどいの広場＝ピンク
   catShokudo: { pin: '#0F6E56', bg: '#E1F5EE', tx: '#0F6E56' }, // こども食堂＝グリーン
+  catAsobi: { pin: '#2E7DD1', bg: '#E3F0FB', tx: '#1A4E86' }, // 遊び場＝青
   tagAge: { bg: '#E6F1FB', tx: '#0C447C' }, // 年齢＝ブルー
   tagDate: { bg: '#FAEEDA', tx: '#854F0B' }, // 日付＝アンバー
   danger: { bg: '#FCEBEB', tx: '#A32D2D' }, // 緊急＝レッド
