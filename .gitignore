@@ -33,6 +33,12 @@ yarn-error.*
 # local env files
 .env*.local
 
+# secrets — 絶対にコミットしない（MCPトークン・環境変数）
+.mcp.json
+.env
+.env.*
+!.env.example
+
 # typescript
 *.tsbuildinfo
 
