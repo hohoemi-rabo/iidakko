@@ -50,6 +50,47 @@ npm run reset-project       # scaffoldを app-example/ へ退避し、空の app
 - `docs/ui-references/` … UI/UX の参考画像（実行時には使わない設計資料）。実装時の見た目の参照元。
 - データ層・型は `REQUIREMENTS.md` 9章の提案構成に従い、`data/*.ts`（静的データ）と `types.ts`（型集約）を新設して実装する。
 
+## Expo SDK 54 ベストプラクティス
+
+> 出典：context7（`/expo/expo` の `sdk-54` ブランチ公式ドキュメント）。SDK 54 で API が変わっているため、実装前に必ず https://docs.expo.dev/versions/v54.0.0/ を参照する。
+
+### バージョン要件（SDK 54 の前提）
+- React **19.1.0** / React Native **0.81** / react-native-web **0.21.0**
+- iOS **15.1+** / Android **7+**（compile/target SDK **36**）/ Xcode **16.1+** / Node **20.19.x**
+- 上記とローカルの Node/Xcode がずれているとビルドが落ちる。実機ビルド前に確認する。
+
+### 依存関係の管理
+- ライブラリ追加・更新は **`npm install` ではなく `npx expo install <pkg>`** を使う（SDK 互換バージョンが選ばれる）。
+- 互換性チェック：**`npx expo install --check`**（package.json を変更せず検証）／ ずれを直す：**`npx expo install --fix`**。
+- 依存を変更したら `--fix` を流してから実機確認する習慣にする。
+
+### New Architecture（既定で有効）
+- SDK 52 以降、`create-expo-app` 製プロジェクトは **New Architecture が既定でオン**（本リポジトリも `app.json` で `newArchEnabled: true`）。
+- 追加するネイティブ依存は **New Architecture 対応版**を選ぶ。未対応ライブラリは避ける。
+
+### expo-router（ナビゲーション）
+- **宣言的遷移は `<Link href="...">`、命令的遷移は `router`**（`push` / `replace` / `back` / `navigate`）を使い分ける。
+  ```tsx
+  import { Link, router } from 'expo-router';
+  // 宣言的
+  <Link href="/map">マップ</Link>
+  // 命令的・動的ルート
+  router.navigate({ pathname: '/facility/[id]', params: { id: '123' } });
+  ```
+- **typed routes 有効**（`app.json` の `experiments.typedRoutes: true`）。存在しないパスへの `href` は型エラーになる＝リンク切れをビルド時に検出できる。ルートを追加したら型が再生成される。
+- 画面は `app/` 配下のファイルで定義し、レイアウト（タブ・スタック）は `_layout.tsx` に集約する。
+
+### 画像・アセット
+- 画像表示は React Native の `Image` ではなく **`expo-image`（`<Image>` from `expo-image`）** を使う（キャッシュ・パフォーマンスで優位、本リポジトリに導入済み）。
+
+### 環境変数
+- クライアントに埋め込む値は **`EXPO_PUBLIC_` プレフィックス**の環境変数で渡す（`process.env.EXPO_PUBLIC_xxx`）。シークレットは絶対に `EXPO_PUBLIC_` で渡さない（バンドルに含まれて露出する）。
+- Google Maps APIキー等のビルド設定は `app.json` / EAS の env で管理する。
+
+### ビルド・配布（EAS）
+- 配布は **EAS Build**。`eas.json` の build profile（`development` / `preview`(internal) / `production`）を用途で使い分ける。
+- `react-native-maps` を使う画面は **Expo Go では動かない**ので、`development` プロファイルの**開発ビルド**（`npx expo run:android` 相当）で確認する。
+
 ## このプロジェクトのGit運用
 
 個人開発のため `main` へ直接コミットしてよい（ブランチ不要）。コミットはコンベンショナルコミット形式（`feat:`/`fix:`/`chore:` 等）。`.mcp.json`・`.env*` はシークレットとして `.gitignore` 済み（コミットしない）。
