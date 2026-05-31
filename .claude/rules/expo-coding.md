@@ -18,6 +18,7 @@ paths:
 - **パスエイリアス**：`@/*` がリポジトリルートを指す（例：`@/components/themed-text`、`@/constants/theme`）。相対パスより `@/` を優先。
 - **テーマ／配色**：`constants/theme.ts` に `Colors`（light/dark）と `Fonts`（プラットフォーム別）。`hooks/use-color-scheme.ts`（web版は `.web.ts`）で現在のスキームを取得し、`hooks/use-theme-color.ts` で色を解決。`components/themed-text.tsx`・`themed-view.tsx` がこれを使う色対応ラッパー。
   - **注意**：`REQUIREMENTS.md` はパステル（コーラル/ピンク）の独自カラートークンを定義している。本実装ではこのデフォルトテーマを REQUIREMENTS のトークンに置き換える。
+  - **方針（決定済み）**：まずは**ライト基調のみ**実装する。**ダークモードは保留**（出来てから様子を見て追加判断）。最初からダーク対応を作り込まない。
 - **プラットフォーム別ファイル**：`.ios.tsx` / `.web.ts` の拡張子で実装を分岐（例：`components/ui/icon-symbol.ios.tsx`、`hooks/use-color-scheme.web.ts`）。Metro が自動で適切な実装を選ぶ。
 - **スタイリング方針**：`REQUIREMENTS.md` は **NativeWind v4（Tailwind 記法）** を採用予定（まだ未インストール）。導入時は Expo v54 のドキュメント手順に従う。
 
