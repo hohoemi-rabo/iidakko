@@ -18,6 +18,11 @@ const MAPPING = {
   'paperplane.fill': 'send',
   'chevron.left.forwardslash.chevron.right': 'code',
   'chevron.right': 'chevron-right',
+  // 5タブ用（ホーム=house.fill / さがす / マップ / イベント / きんきゅう）
+  magnifyingglass: 'search',
+  'mappin.and.ellipse': 'place',
+  calendar: 'calendar-today',
+  'exclamationmark.triangle.fill': 'warning',
 } as IconMapping;
 
 /**
