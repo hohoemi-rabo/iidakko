@@ -28,6 +28,7 @@ const MAPPING = {
   'arrow.up.right.square': 'open-in-new',
   map: 'map',
   heart: 'favorite',
+  'book.fill': 'menu-book',
 } as IconMapping;
 
 /**
