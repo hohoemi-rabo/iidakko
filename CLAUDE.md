@@ -15,7 +15,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
   - データは**すべて静的な TypeScript/JSON**。バックエンド・DB・認証は作らない（Supabaseは Phase 2 以降）。
   - **実行時ジオコーディングをしない。** 住所→緯度経度はビルド前に一度だけ変換し、`facilities.ts` に数値で直書きする。
   - **過剰実装をしない。** 迷ったら `REQUIREMENTS.md` の「やらないこと」に従い、作らない方を選ぶ。
-- **現状とのギャップ**：いま `app/` 以下にあるのは `create-expo-app` のデフォルトscaffold（タブ2つ・themedコンポーネント等）。`REQUIREMENTS.md` が定義する5タブ構成（ホーム/さがす/マップ/イベント/きんきゅう）はこれから実装する。`npm run reset-project` で空の `app/` に作り直せる（既存scaffoldは `app-example/` へ退避される）。
+## 実装状況（随時更新）
+
+`create-expo-app` のデフォルトscaffoldは撤去済み。5タブ構成・パステルテーマ・NativeWind v4・静的データを実装中。チケットごとの進捗は `docs/tickets/`（各 `- [×]`）が唯一の情報源。
+
+- **完了**：01 共通基盤（5タブ・NativeWind v4・テーマ・型）／ 02 共通コンポーネント（`components/` の Tag・各Card・Segment 等＋`lib/`）／ 03 ホーム（`app/(tabs)/index.tsx`）／ 08 データ整備（`data/*.ts` 投入・施設13件はジオコーディング済み）。
+- **未着手**：04 さがす／05 マップ（★主役・`react-native-maps` 未導入）／06 イベント／07 きんきゅう／09 ビルド・配布。
+- 検証用の `app/showcase.tsx`（`/showcase`、タブ外）が共通部品の確認用に残っている。04〜06 完了後に削除予定。
+- ⚠️ **`npm run reset-project` は使わない**：いま実行すると実装済みの `app/` を `app-example/` へ退避してしまう（初期化専用。もう不要）。
 
 ## コマンド
 
@@ -27,10 +34,14 @@ npm run android             # Android で起動
 npm run ios                 # iOS で起動
 npm run web                 # Web で起動
 npm run lint                # expo lint（eslint-config-expo）
-npm run reset-project       # scaffoldを app-example/ へ退避し、空の app/ を作る
+npx tsc --noEmit            # 型チェック（typed routes 含む）
+npx expo export -p web      # web 向けワンショットバンドル（CI的な検証に有効）
+npx expo start -c --web     # 設定変更後はキャッシュクリア（-c）で web 起動
+# npm run reset-project     # 初期化専用。実装済みのいま実行してはいけない（app/ を退避してしまう）
 ```
 
-- テストランナーは未導入（テストスクリプトなし）。
+- テストランナーは未導入（テストスクリプトなし）。各チケットの検証は `tsc --noEmit` / `expo lint` / `expo export -p web` で行っている。
+- 施設座標は `scripts/geocode.mjs`（住所→緯度経度をビルド前に一度だけ変換）。`.env` の `GOOGLE_MAPS_API_KEY` を読んで実行する（`.env` は gitignore 済み・コミット不可）。
 - **`react-native-maps`（マップ機能）は Expo Go では動かない。** EAS 開発ビルド（`npx expo run:android` 等）が必要。詳細は下記ルール参照。
 
 ## 詳細ルールの置き場（コンテキスト節約のため分割）

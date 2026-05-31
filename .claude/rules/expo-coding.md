@@ -14,19 +14,23 @@ paths:
 
 **Expo Router（ファイルベースルーティング）+ React Native 0.81 + React 19 + TypeScript（strict）。** New Architecture 有効、`app.json` の experiments で **typed routes** と **React Compiler** が有効。
 
-- **ルーティング**：`app/` 配下のファイルがそのまま画面になる。`app/_layout.tsx` がルートスタック、`app/(tabs)/_layout.tsx` がボトムタブ。新しい画面はファイルを追加して定義する。
-- **パスエイリアス**：`@/*` がリポジトリルートを指す（例：`@/components/themed-text`、`@/constants/theme`）。相対パスより `@/` を優先。
-- **テーマ／配色**：`constants/theme.ts` に `Colors`（light/dark）と `Fonts`（プラットフォーム別）。`hooks/use-color-scheme.ts`（web版は `.web.ts`）で現在のスキームを取得し、`hooks/use-theme-color.ts` で色を解決。`components/themed-text.tsx`・`themed-view.tsx` がこれを使う色対応ラッパー。
-  - **注意**：`REQUIREMENTS.md` はパステル（コーラル/ピンク）の独自カラートークンを定義している。本実装ではこのデフォルトテーマを REQUIREMENTS のトークンに置き換える。
-  - **方針（決定済み）**：まずは**ライト基調のみ**実装する。**ダークモードは保留**（出来てから様子を見て追加判断）。最初からダーク対応を作り込まない。
-- **プラットフォーム別ファイル**：`.ios.tsx` / `.web.ts` の拡張子で実装を分岐（例：`components/ui/icon-symbol.ios.tsx`、`hooks/use-color-scheme.web.ts`）。Metro が自動で適切な実装を選ぶ。
-- **スタイリング方針**：`REQUIREMENTS.md` は **NativeWind v4（Tailwind 記法）** を採用予定（まだ未インストール）。導入時は Expo v54 のドキュメント手順に従う。
+- **ルーティング**：`app/` 配下のファイルがそのまま画面になる。`app/_layout.tsx` がルートスタック（ライト固定 `DefaultTheme`＋`SafeAreaProvider`、先頭で `global.css` を import）、`app/(tabs)/_layout.tsx` が5タブ（index/search/map/events/emergency）。新しい画面はファイルを追加して定義する。
+- **パスエイリアス**：`@/*` がリポジトリルートを指す（例：`@/components/tag`、`@/theme/colors`、`@/lib/links`、`@/data/facilities`、`@/types`）。相対パスより `@/` を優先。
+- **テーマ／配色（実装済み・ライト基調のみ）**：
+  - **`theme/palette.cjs` がカラーの単一の真実**（生の hex はここだけ）。`theme/colors.ts` が型付き re-export（RNスタイルや `className` を当てられない箇所＝`tabBarStyle`・地図マーカー色・円アイコン背景等で使う）、`tailwind.config.js` が同じ palette を colors に流し込む（→ `bg-bg` `text-text` `bg-catHoiku-bg` `text-catHoiku-tx` 等）。`theme/typography.ts` にサイズ/レイアウト定数。
+  - 施設カテゴリ色は6種（catHoiku/catKodomoen/catIchiji/catHiroba/catShokudo/catAsobi）＋ tagAge/tagDate/danger。palette に色を足したら **`theme/colors.ts` の型にも追記**しないと `colors.catX` が型エラーになる。
+  - **ダークモードは保留**。`create-expo-app` の themed 機構（`constants/theme.ts`・`hooks/use-color-scheme*`・`hooks/use-theme-color`・`components/themed-text|themed-view`）は**削除済み**。`hooks/` `constants/` ディレクトリは存在しない。色は NativeWind の `className` か `theme/colors.ts` で当てる。
+- **プラットフォーム別ファイル**：`.ios.tsx` / `.web.ts` の拡張子で実装を分岐（例：`components/ui/icon-symbol.ios.tsx`＝SF Symbol を直接、`icon-symbol.tsx`＝Android/web 向け MaterialIcons マッピング）。Metro が自動で適切な実装を選ぶ。
+- **スタイリング方針（NativeWind v4 導入済み）**：`className` で書く（`babel.config.js`＝`jsxImportSource:'nativewind'`＋`nativewind/babel`、`metro.config.js`＝`withNativeWind(input:'./global.css')`、`tailwind.config.js`、`nativewind-env.d.ts`）。tailwindcss は **v3 系**（v4 は入れない）。**設定やクラスを変えたら `expo start -c` でキャッシュクリア**（反映されない既知の罠）。
+  - **動的classは禁止**：`` bg-${x} `` は Tailwind の content スキャンに拾われず無色になる。種別→色は **`components/tokens.ts` の静的 `TONE` マップに literal 列挙**する（`components/**` は content 対象。`lib/**` に置くとパージされるので不可）。
+  - **Tag は外枠 `<View>` に `bg-*`、内側 `<Text>` に `text-*` を分けて当てる**（NativeWind v4 で Text の色を確実に伝えるため）。押下感は `active:opacity-90`、選択状態は state 由来の className 三項切替。タップ領域は `min-h-touch`/`min-w-touch`、角丸は `rounded-card`/`rounded-pill`、影は使わず `border border-border`。
 
 ## ディレクトリ規約
 
-- `app/` … 画面（ルーティング）。`components/` … 再利用UI（`components/ui/` は低レベル部品）。`hooks/` … カスタムフック。`constants/` … テーマ等の定数。`assets/` … **アプリが実行時にバンドルする**画像（アイコン・スプラッシュ）。
-- `docs/ui-references/` … UI/UX の参考画像（実行時には使わない設計資料）。実装時の見た目の参照元。
-- データ層・型は `REQUIREMENTS.md` 9章の提案構成に従い、`data/*.ts`（静的データ）と `types.ts`（型集約）を新設して実装する。
+- `app/` … 画面（ルーティング）。`components/` … 再利用UI（`components/ui/` は低レベル部品、`components/tokens.ts` は種別→色の静的classマップ）。`lib/` … UI非依存のロジック（`links.ts`＝tel/経路/外部リンク、`labels.ts`＝日本語ラベル、`categories.ts`＝カテゴリ→tone/ピン色）。`theme/` … `palette.cjs`/`colors.ts`/`typography.ts`。`data/` … 静的データ（`articles`/`facilities`/`events`/`emergency`）。`types.ts` … 型集約。`assets/` … **実行時にバンドルする**画像（アイコン・スプラッシュ）。
+- `docs/ui-references/` … UI/UX の参考画像（`home.png`・`map.png`＝ライト基調が実装基準、`sagasu_ivent.png`＝レイアウト参照のダークモック）。実装時の見た目の参照元。
+- **ファイル名は kebab-case**（`tag.tsx`・`facility-card.tsx`）、**export するコンポーネント名は PascalCase**（`Tag`・`FacilityCard`）。既存に合わせる。
+- 命名・配置の判断に迷ったら、既存の `components/` `lib/` の同種ファイルに倣う。`hooks/` `constants/` は存在しない（削除済み）。
 
 ## Expo SDK 54 ベストプラクティス
 
