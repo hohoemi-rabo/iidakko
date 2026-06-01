@@ -9,6 +9,7 @@ export interface SegmentedControlProps<T extends string> {
   options: [SegmentOption<T>, SegmentOption<T>]; // 2分割
   value: T;
   onChange: (next: T) => void;
+  labelClassName?: string; // ラベルのサイズ等を上書き（既定は text-body）
 }
 
 // 汎用2分割トグル（[年齢でさがす | 目的でさがす] 等）。選択側はコーラル塗り＋白文字。
@@ -16,6 +17,7 @@ export function SegmentedControl<T extends string>({
   options,
   value,
   onChange,
+  labelClassName = 'text-body',
 }: SegmentedControlProps<T>) {
   return (
     <View className="flex-row rounded-pill border border-border bg-surface p-1">
@@ -31,7 +33,7 @@ export function SegmentedControl<T extends string>({
               selected ? 'bg-primary' : 'bg-transparent'
             }`}>
             <Text
-              className={`text-body font-bold ${selected ? 'text-surface' : 'text-textSub'}`}>
+              className={`${labelClassName} font-bold ${selected ? 'text-surface' : 'text-textSub'}`}>
               {opt.label}
             </Text>
           </Pressable>

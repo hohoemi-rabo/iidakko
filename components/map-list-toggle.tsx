@@ -17,6 +17,7 @@ export function MapListToggle({ value, onChange }: MapListToggleProps) {
       ]}
       value={value}
       onChange={onChange}
+      labelClassName="text-tag"
     />
   );
 }
