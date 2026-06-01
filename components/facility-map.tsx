@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import MapView, { Marker, PROVIDER_GOOGLE, type Region } from 'react-native-maps';
 
@@ -27,12 +28,22 @@ function PinMarker({
 }) {
   const color = facilityPinColor(facility.category);
   const size = selected ? 24 : 18;
+
+  // カスタムView のマーカーは、初回（と見た目が変わる選択時）に tracksViewChanges=true で
+  // ビューをマーカー画像へキャプチャし、その後 false に固定する。
+  // 最初から false だと Android でマーカー画像が生成されず空（透明）になるため必須。
+  const [tracks, setTracks] = useState(true);
+  useEffect(() => {
+    setTracks(true);
+    const t = setTimeout(() => setTracks(false), 600);
+    return () => clearTimeout(t);
+  }, [selected]);
+
   return (
     <Marker
       coordinate={{ latitude: facility.lat, longitude: facility.lng }}
       onPress={onPress}
-      // 静的データ・カスタムView のため初期描画後の再描画を止める（Android のちらつき防止）。
-      tracksViewChanges={false}
+      tracksViewChanges={tracks}
       anchor={{ x: 0.5, y: 0.5 }}
       title={facility.name}>
       <View
