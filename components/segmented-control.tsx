@@ -31,6 +31,7 @@ export function SegmentedControl<T extends string>({
               selected ? 'bg-primary' : 'bg-transparent'
             }`}>
             <Text
+              numberOfLines={1}
               className={`text-body font-bold ${selected ? 'text-surface' : 'text-textSub'}`}>
               {opt.label}
             </Text>

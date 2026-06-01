@@ -39,7 +39,7 @@ export default function MapScreen() {
           numberOfLines={1}>
           あずける・あそぶ場所
         </Text>
-        <View className="w-32 shrink-0">
+        <View className="w-36 shrink-0">
           <MapListToggle value={mode} onChange={setMode} />
         </View>
       </View>
