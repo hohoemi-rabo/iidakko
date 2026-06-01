@@ -7,9 +7,7 @@ import { CategoryChips, type ChipValue } from '@/components/category-chips';
 import { FacilityCard } from '@/components/facility-card';
 import { FacilityMap } from '@/components/facility-map';
 import { MapListToggle, type MapListMode } from '@/components/map-list-toggle';
-import { IconSymbol } from '@/components/ui/icon-symbol';
 import { facilities } from '@/data/facilities';
-import { colors } from '@/theme/colors';
 
 export default function MapScreen() {
   const [mode, setMode] = useState<MapListMode>('map');
@@ -35,12 +33,13 @@ export default function MapScreen() {
   return (
     <SafeAreaView className="flex-1 bg-bg" edges={['top']}>
       {/* ヘッダー：タイトル＋[地図|一覧]トグル */}
-      <View className="flex-row items-center justify-between gap-3 px-4 pb-2 pt-1">
-        <View className="flex-row items-center gap-2">
-          <IconSymbol name="mappin.and.ellipse" size={22} color={colors.primaryDk} />
-          <Text className="text-heading font-bold text-text">あずける・あそぶ場所</Text>
-        </View>
-        <View className="w-36">
+      <View className="flex-row items-center justify-between gap-2 px-4 pb-2 pt-1">
+        <Text
+          className="flex-1 text-headingSm font-bold text-text"
+          numberOfLines={1}>
+          あずける・あそぶ場所
+        </Text>
+        <View className="w-32 shrink-0">
           <MapListToggle value={mode} onChange={setMode} />
         </View>
       </View>

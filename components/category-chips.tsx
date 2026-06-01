@@ -23,7 +23,9 @@ export function CategoryChips({ value, onChange, options }: CategoryChipsProps) 
     <ScrollView
       horizontal
       showsHorizontalScrollIndicator={false}
-      contentContainerClassName="flex-row gap-2 px-4 py-2">
+      // 横スクロールの ScrollView は flex 親の中で縦方向に伸びてしまうため flexGrow:0 で内容高に固定。
+      style={{ flexGrow: 0 }}
+      contentContainerClassName="flex-row items-center gap-2 px-4 py-2">
       {items.map((v) => {
         const selected = v === value;
         return (
