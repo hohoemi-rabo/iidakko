@@ -17,11 +17,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
   - **過剰実装をしない。** 迷ったら `REQUIREMENTS.md` の「やらないこと」に従い、作らない方を選ぶ。
 ## 実装状況（随時更新）
 
-`create-expo-app` のデフォルトscaffoldは撤去済み。5タブ構成・パステルテーマ・NativeWind v4・静的データを実装中。チケットごとの進捗は `docs/tickets/`（各 `- [×]`）が唯一の情報源。
+`create-expo-app` のデフォルトscaffoldは撤去済み。5タブ構成・パステルテーマ・NativeWind v4・静的データで全画面を実装済み。チケットごとの進捗は `docs/tickets/`（各 `- [×]`）が唯一の情報源。
 
-- **完了**：01 共通基盤（5タブ・NativeWind v4・テーマ・型）／ 02 共通コンポーネント（`components/` の Tag・各Card・Segment 等＋`lib/`）／ 03 ホーム（`app/(tabs)/index.tsx`）／ 08 データ整備（`data/*.ts` 投入・施設13件はジオコーディング済み）。
-- **未着手**：04 さがす／05 マップ（★主役・`react-native-maps` 未導入）／06 イベント／07 きんきゅう／09 ビルド・配布。
-- 検証用の `app/showcase.tsx`（`/showcase`、タブ外）が共通部品の確認用に残っている。04〜06 完了後に削除予定。
+- **完了**：01 共通基盤（5タブ・NativeWind v4・テーマ・型）／ 02 共通コンポーネント（`components/` の Tag・各Card・Segment・`FilterChips` 等＋`lib/`）／ 03 ホーム／ 04 さがす／ 05 マップ（★主役・`react-native-maps` 導入済み）／ 06 イベント／ 07 きんきゅう／ 08 データ整備（`data/*.ts` 投入・施設13件はジオコーディング済み）。**5画面すべて `app/(tabs)/*.tsx` に実装済み**。
+- **未着手**：09 ビルド・配布（Maps APIキーの EAS env 管理・config plugin・EAS 開発ビルド・デモ用APK）。**05 の地図の実機描画確認（色分けピン・カードせり出し・外部リンク起動）も 09 で最終確認**する（`react-native-maps` は Expo Go 不可のためこのセッションでは未検証）。
+- 検証用の `app/showcase.tsx`（`/showcase`、タブ外）が共通部品の確認用に残っている。04〜07 完了済みのため**削除可能**（削除はユーザー確認のうえ）。
 - ⚠️ **`npm run reset-project` は使わない**：いま実行すると実装済みの `app/` を `app-example/` へ退避してしまう（初期化専用。もう不要）。
 
 ## コマンド
@@ -42,7 +42,7 @@ npx expo start -c --web     # 設定変更後はキャッシュクリア（-c）
 
 - テストランナーは未導入（テストスクリプトなし）。各チケットの検証は `tsc --noEmit` / `expo lint` / `expo export -p web` で行っている。
 - 施設座標は `scripts/geocode.mjs`（住所→緯度経度をビルド前に一度だけ変換）。`.env` の `GOOGLE_MAPS_API_KEY` を読んで実行する（`.env` は gitignore 済み・コミット不可）。
-- **`react-native-maps`（マップ機能）は Expo Go では動かない。** EAS 開発ビルド（`npx expo run:android` 等）が必要。詳細は下記ルール参照。
+- **`react-native-maps`（v1.20.1・導入済み）はマップ画面で使用。Expo Go では動かない。** EAS 開発ビルド（`npx expo run:android` 等）が必要。**web は非対応のため `components/facility-map.web.tsx` のプレースホルダにフォールバック**（だから `expo export -p web` は通る）。Android の Maps APIキー（`app.json` の `android.config.googleMaps.apiKey` を env 経由）と config plugin は **09 で設定**。詳細は下記ルール参照。
 
 ## 詳細ルールの置き場（コンテキスト節約のため分割）
 
